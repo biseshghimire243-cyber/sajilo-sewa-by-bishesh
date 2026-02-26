@@ -1,0 +1,19 @@
+.floating-booking {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #007bff;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+  z-index: 1000;
+}
+
+.floating-booking:hover {
+  transform: scale(1.1);
+  background-color: #0056b3;
+}
