@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
+
+
 function Home() {
   const location = useLocation();
   const [services, setServices] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [user, setUser] = useState(null);
+  
 
   useEffect(() => {
     // Load services

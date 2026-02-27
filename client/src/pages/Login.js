@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -43,9 +42,8 @@ if (email === "admin@gmail.com" && password === "123456") {
 
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:5000/send-otp", {
-        email,
-      });
+      const res = await axios.post("http://localhost:5000/send-otp", { email });
+setMessage(`📩 ${res.data.msg}`);
 
       setOtpSent(true);
       setMessage("📩 OTP sent to your Gmail!");
@@ -118,16 +116,15 @@ if (email === "admin@gmail.com" && password === "123456") {
               </button>
 
               <div className="text-center mt-3">
-                <span
-                  className="text-primary"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setShowForgot(true);
-                    setMessage("");
-                  }}
-                >
-                  Forgot Password?
-                </span>
+               <div className="text-center mt-3">
+  <span
+    className="text-primary"
+    style={{ cursor: "pointer" }}
+    onClick={() => navigate("/forgot-password")}
+  >
+    Forgot Password?
+  </span>
+</div>
               </div>
             </>
           ) : (
@@ -208,5 +205,4 @@ if (email === "admin@gmail.com" && password === "123456") {
     </div>
   );
 }
-
 export default Login;

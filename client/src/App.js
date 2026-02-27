@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import FloatingBooking from "./components/FloatingBooking"; // ✅ import at top
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/services/:id" element={<ServiceDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
 
       {/* Floating Booking button */}
