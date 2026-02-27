@@ -1,3 +1,4 @@
+const nodemailer = require("nodemailer");
 const express = require("express");
 const cors = require("cors");
 
@@ -79,6 +80,56 @@ app.post("/book", (req, res) => {
   bookings.push(booking);
 
   res.json({ msg: "Booking successful", booking });
+});
+// ================= OTP SYSTEM =================
+
+let otpStore = {}; // temporary storage
+
+// 📩 Send OTP
+app.post("/send-otp", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ msg: "Email is required" });
+  }
+
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  otpStore[email] = otp;
+
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "biseshghimire243@gmail.com",        // 🔴 CHANGE THIS
+        pass: "gbxc owsb buvl nrjv", // 🔴 CHANGE THIS
+      },
+    });
+
+    await transporter.sendMail({
+      from: "biseshghimire243@gmail.com",
+      to: email,
+      subject: "Sajilo Sewa - Password Reset OTP",
+      text: `Your OTP is ${otp}`,
+    });
+
+    res.json({ msg: "OTP sent successfully" });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Failed to send OTP" });
+  }
+});
+
+// ✅ Verify OTP
+app.post("/verify-otp", (req, res) => {
+  const { email, otp } = req.body;
+
+  if (otpStore[email] == otp) {
+    delete otpStore[email];
+    res.json({ success: true });
+  } else {
+    res.status(400).json({ success: false, msg: "Invalid OTP" });
+  }
 });
 
 // ✅ Contact Form

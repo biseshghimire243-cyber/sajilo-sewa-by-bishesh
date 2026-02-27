@@ -1,26 +1,95 @@
 // src/pages/Home.jsx
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 
 function Home() {
+  const location = useLocation();
   const [services, setServices] = useState([]);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Load services
     axios
       .get("http://localhost:5000/services")
       .then((res) => setServices(res.data))
       .catch((err) => console.log(err));
-  }, []);
+
+    // Load logged-in user from localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+
+    // Show login success message
+    if (location.state?.success) {
+      setSuccessMessage(location.state.success);
+      setTimeout(() => setSuccessMessage(""), 3000);
+    }
+  }, [location]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
   return (
     <div>
+      {/* Success message */}
+      {successMessage && (
+        <div className="alert alert-success text-center m-0 rounded-0">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Small Profile Avatar with Red Logout Dot */}
+      {user && (
+        <div
+          style={{
+            position: "fixed",
+            top: "15px",
+            right: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            zIndex: 1000,
+          }}
+        >
+          {/* Avatar */}
+          <img
+            src={user.photo || "/images/default-avatar.png"}
+            alt={user.name}
+            style={{
+              width: "35px",
+              height: "35px",
+              borderRadius: "50%",
+              border: "2px solid white",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+            }}
+          />
+
+          {/* Red Logout Dot */}
+          <span
+            onClick={handleLogout}
+            style={{
+              width: "12px",
+              height: "12px",
+              borderRadius: "50%",
+              backgroundColor: "red",
+              cursor: "pointer",
+              display: "inline-block",
+            }}
+            title="Logout"
+          ></span>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section
         className="hero-section d-flex align-items-center justify-content-center text-center text-white"
         style={{
           minHeight: "90vh",
-          background: "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/hero-bg.jpg') center/cover no-repeat",
+          background:
+            "linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('/images/hero-bg.jpg') center/cover no-repeat",
         }}
       >
         <div style={{ maxWidth: "700px" }}>
@@ -52,7 +121,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Featured Services with Hover Animation */}
+      {/* Featured Services */}
       <section className="featured-services py-5 text-center bg-white">
         <div className="container">
           <h2 className="mb-5 fw-bold">Popular Services</h2>
@@ -81,7 +150,6 @@ function Home() {
               </div>
             ))}
           </div>
-
           {services.length > 0 && (
             <Link to="/services" className="btn btn-primary btn-lg mt-4">
               See All Services
@@ -93,9 +161,7 @@ function Home() {
       {/* Call-to-Action Banner */}
       <section
         className="cta-section py-5 text-white text-center"
-        style={{
-          background: "linear-gradient(135deg, #494c4f, #00c6ff)",
-        }}
+        style={{ background: "linear-gradient(135deg, #494c4f, #00c6ff)" }}
       >
         <div className="container">
           <h3 className="mb-3 fw-bold">Book Your Service Now!</h3>
@@ -125,7 +191,7 @@ function Home() {
             height: 180px;
           }
           .card-img-wrapper img {
-            width: 100%;
+            width: 50%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;

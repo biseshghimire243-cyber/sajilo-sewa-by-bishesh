@@ -8,6 +8,8 @@ import ServiceDetails from "./pages/ServiceDetails";
 // Components
 import Navbar from "./components/Navbar";
 import FloatingBooking from "./components/FloatingBooking"; // ✅ import at top
+import Login from "./pages/Login";
+import Contact from "./pages/Contact";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
         <Route path="/services/:id" element={<ServiceDetails />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
 
       {/* Floating Booking button */}
